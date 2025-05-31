@@ -183,11 +183,13 @@ const Home = () => {
               {filteredCars.length > 0 ? (
                 <>
                   {showMap ? (
-                    <Suspense fallback={<div className="h-[600px] flex items-center justify-center">Se încarcă harta...</div>}>
-                      <div className="h-[600px] rounded-lg overflow-hidden shadow-lg border border-gray-200">
-                        <CarsMap locationGroups={locationGroups} />
-                      </div>
-                    </Suspense>
+                    <div className="sticky top-20 h-[calc(100vh-5rem)] z-0">
+                      <Suspense fallback={<div className="h-full flex items-center justify-center">Se încarcă harta...</div>}>
+                        <div className="h-full rounded-lg overflow-hidden shadow-lg border border-gray-200">
+                          <CarsMap locationGroups={locationGroups} />
+                        </div>
+                      </Suspense>
+                    </div>
                   ) : (
                     <>
                       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">

@@ -1,3 +1,4 @@
+// CarsMap.js
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -15,12 +16,22 @@ const defaultIcon = new L.Icon({
 
 const clusterIcon = (count) => {
   return L.divIcon({
-    html: `<div style="background-color: #F59E0B; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">${count}</div>`,
-    className: 'cluster-marker',
+    html: `<div class="flex items-center justify-center w-9 h-9 rounded-full bg-amber-500 text-white font-bold text-sm border-2 border-white shadow-md">${count}</div>`,
+    className: '',
     iconSize: [36, 36],
     iconAnchor: [18, 18]
   });
 };
+
+const carIcon = new L.Icon({
+  iconUrl: 'https://cdn-icons-png.flaticon.com/512/3097/3097180.png', // URL pentru iconița de mașină
+  iconRetinaUrl: 'https://cdn-icons-png.flaticon.com/512/3097/3097180.png', // Aceeași pentru Retina
+  iconSize: [30, 30], // Dimensiuni ajustate
+  iconAnchor: [15, 30], // Ajustează punctul de ancorare
+  popupAnchor: [0, -30], // Ajustează poziția popup-ului
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png', // Păstrează umbra
+  shadowSize: [41, 41]
+});
 
 const CarsMap = ({ locationGroups }) => {
   const center = locationGroups.length > 0 
@@ -28,7 +39,12 @@ const CarsMap = ({ locationGroups }) => {
     : [44.4268, 26.1025];
 
   return (
-    <MapContainer center={center} zoom={12} style={{ height: '100%', width: '100%' }}>
+    <MapContainer 
+      center={center} 
+      zoom={12} 
+      style={{ height: '100%', width: '100%' }}
+      className="rounded-lg shadow-lg"
+    >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -37,7 +53,7 @@ const CarsMap = ({ locationGroups }) => {
         <Marker
           key={index}
           position={[group.location.lat, group.location.lng]}
-          icon={group.cars.length > 1 ? clusterIcon(group.cars.length) : defaultIcon}
+          icon={group.cars.length > 1 ? clusterIcon(group.cars.length) : carIcon}
         >
           <Popup className="custom-popup" maxWidth={400} minWidth={300}>
             <div className="max-h-[70vh] overflow-y-auto p-2">
