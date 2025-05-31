@@ -1,0 +1,26 @@
+*.sqlite
+*.pb
+*.exe
+codeium/
+*.log
+
+# Node modules
+node_modules/
+
+# Dependencies locks
+package-lock.json
+yarn.lock
+
+# Build output
+dist/
+build/
+
+# Env files
+.env
+.env.*
+
+# Coverage
+coverage/
+
+# IDE settings
+.vscode/
