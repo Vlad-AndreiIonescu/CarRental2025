@@ -67,3 +67,21 @@ export const deleteCar = async (req, res, next) => {
     next(createError("Error deleting car", 500));
   }
 };
+
+export const addReviewToCar = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { rating, comment } = req.body;
+
+    const car = await Car.findById(id);
+    if (!car) return next(createError("Car not found", 404));
+
+    car.reviews.push({ rating, comment });
+    await car.save();
+
+    res.status(201).json(car);
+  } catch (error) {
+    next(createError("Error adding review", 500));
+  }
+};
+

@@ -9,15 +9,17 @@ const AccordionItemReviews = ({ reviews, onAddReview }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!rating || !comment.trim()) return;
+    if (!rating || !comment.trim()) {
+      alert("Please select a rating and write a review");
+      return;
+    }
 
-    const newReview = {
-      id: Date.now(),
+    onAddReview({
       rating,
       comment,
-    };
-
-    onAddReview(newReview);
+      date: new Date().toISOString()
+    });
+    
     setRating(0);
     setComment("");
   };
@@ -25,44 +27,59 @@ const AccordionItemReviews = ({ reviews, onAddReview }) => {
   return (
     <div className="border rounded overflow-hidden">
       <button
-        className="flex justify-between items-center w-full p-4 text-left font-semibold"
+        className="flex justify-between items-center w-full p-4 text-left font-semibold hover:bg-gray-50 transition-colors"
         onClick={() => setIsOpen(!isOpen)}
       >
-        Customer Reviews
+        Customer Reviews ({reviews.length})
         <FaChevronDown
-          className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+          className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
         />
       </button>
 
       {isOpen && (
         <div className="p-4 border-t space-y-6">
-          {/* Afișăm review-urile existente */}
+          {/* Reviews list */}
           {reviews.length === 0 ? (
-            <p className="text-gray-600">No reviews yet. Be the first to leave one!</p>
+            <p className="text-gray-600 italic">No reviews yet. Be the first to review!</p>
           ) : (
-            reviews.map((review) => (
-              <div key={review.id} className="p-3 border rounded-md">
-                <StarRating rating={review.rating} />
-                <p className="text-gray-700 mt-2">{review.comment}</p>
-              </div>
-            ))
+            <div className="space-y-4">
+              {reviews.map((review, index) => (
+                <div key={index} className="p-3 bg-gray-50 rounded-md">
+                  <div className="flex items-center gap-2">
+                    <StarRating rating={review.rating} />
+                    <span className="text-sm text-gray-500">
+                      {new Date(review.date).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-gray-700">{review.comment}</p>
+                </div>
+              ))}
+            </div>
           )}
 
-          {/* Form pentru review nou */}
-          <form onSubmit={handleSubmit} className="space-y-4 pt-4 border-t">
-            <div>
-              <label className="block text-gray-700 mb-1 font-semibold">Add Your Review</label>
-              <StarRating rating={rating} setRating={setRating} />
+          {/* Add review form */}
+          <form onSubmit={handleSubmit} className="pt-4 border-t">
+            <h3 className="font-medium text-gray-800 mb-3">Add Your Review</h3>
+            
+            <div className="mb-3">
+              <StarRating 
+                rating={rating} 
+                onRatingChange={setRating} 
+              />
             </div>
+            
             <textarea
-              className="w-full p-2 border rounded"
-              placeholder="Write your review..."
+              className="w-full p-3 border rounded-md focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+              rows="4"
+              placeholder="Share your experience with this car..."
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-            ></textarea>
+              required
+            />
+            
             <button
               type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+              className="mt-3 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-md transition-colors"
             >
               Submit Review
             </button>

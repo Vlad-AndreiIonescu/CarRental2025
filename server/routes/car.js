@@ -5,6 +5,7 @@ import {
   createCar,
   deleteCar,
   updateCar,
+  addReviewToCar,
 } from "../controllers/carController.js";
 import authMiddleware from '../middlewares/authMiddleware.js';
 
@@ -17,5 +18,6 @@ router.post("/", authMiddleware, createCar);
 router.put("/:id", authMiddleware, updateCar);
 router.patch("/:id",authMiddleware, updateCar);
 router.delete("/:id", authMiddleware, deleteCar);
+router.post("/:id/reviews", addReviewToCar);
 
 export default router;

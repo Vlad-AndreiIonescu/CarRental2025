@@ -23,9 +23,24 @@ const CarDetails = () => {
 
   const [reviews, setReviews] = useState([]);
 
-  const handleAddReview = (newReview) => {
-    setReviews([...reviews, newReview]);
-  };
+const handleAddReview = async (newReview) => {
+  try {
+    const response = await fetch(`/api/cars/${id}/reviews`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newReview),
+    });
+
+    if (!response.ok) throw new Error("Failed to add review");
+
+    const updatedCar = await response.json();
+    setReviews(updatedCar.reviews || []);
+    toast.success("Review submitted successfully!");
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to submit review");
+  }
+};
 
   useEffect(() => {
     const fetchCar = async () => {
@@ -33,6 +48,7 @@ const CarDetails = () => {
         const response = await fetch(`/api/cars/${id}`);
         const data = await response.json();
         setCar(data);
+        setReviews(data.reviews || []);
         if (data.location) {
           setMapCenter(data.location);
           setPickupLocation(data.location.name || "");
@@ -57,9 +73,9 @@ const CarDetails = () => {
   const handleMapClick = (e) => {
     const clickedLat = e.latLng.lat();
     const clickedLng = e.latLng.lng();
-  
+
     const toRadians = (deg) => (deg * Math.PI) / 180;
-  
+
     const distance = (lat1, lng1, lat2, lng2) => {
       const dLat = toRadians(lat2 - lat1);
       const dLng = toRadians(lng2 - lng1); // ✅ corect aici!
@@ -70,10 +86,10 @@ const CarDetails = () => {
         Math.sin(dLng / 2) ** 2;
       return 6371 * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))); // în km
     };
-  
+
     let closestCity = null;
     let minDistance = Infinity;
-  
+
     for (const city of majorCities) {
       const dist = distance(clickedLat, clickedLng, city.lat, city.lng);
       if (dist <= 15) {
@@ -86,7 +102,7 @@ const CarDetails = () => {
         closestCity = city;
       }
     }
-  
+
     // Dacă e prea departe de orice oraș cu sediu
     if (closestCity) {
       toast.warn(`Locația aleasă este prea departe. Am setat orașul cel mai apropiat: ${closestCity.name}`);
@@ -100,19 +116,19 @@ const CarDetails = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-  <Navbar />
-  <div className="max-w-[1600px] mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-2 gap-10 min-h-[calc(100vh-4rem)] items-stretch">
+      <Navbar />
+      <div className="max-w-[1600px] mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-2 gap-10 min-h-[calc(100vh-4rem)] items-stretch">
 
         <LeftSection car={car} reviews={reviews} handleAddReview={handleAddReview} />
-          <RightSection
-            car={car}
-            pickupLocation={pickupLocation}
-            handleCitySelect={handleCitySelect}
-            majorCities={majorCities}
-            mapCenter={mapCenter}
-            handleMapClick={handleMapClick}
-          />
-        </div>
+        <RightSection
+          car={car}
+          pickupLocation={pickupLocation}
+          handleCitySelect={handleCitySelect}
+          majorCities={majorCities}
+          mapCenter={mapCenter}
+          handleMapClick={handleMapClick}
+        />
+      </div>
     </div>
   );
 };

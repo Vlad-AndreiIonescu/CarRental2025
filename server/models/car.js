@@ -65,6 +65,13 @@ const carSchema = new mongoose.Schema({
   image: { type: String, required: true },
   description: { type: String },
   isAvailable: { type: Boolean, default: true },
+  reviews: [
+  {
+    rating: { type: Number, required: true },
+    comment: { type: String, required: true },
+    date: { type: Date, default: Date.now },
+  }
+],
 });
 
 const Car = mongoose.model('Car', carSchema, 'car');
