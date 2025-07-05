@@ -50,8 +50,8 @@ router.post("/create-checkout-session", authMiddleware, async (req, res) => {
           quantity: 1,
         }
       ],
-      success_url: `http://localhost:3000/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `http://localhost:3000/payment-cancelled`,
+      success_url: 'https://car-rental2025.vercel.app/payment-success?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: 'https://car-rental2025.vercel.app/payment-cancelled',
       metadata: {
         userId,
         car,
