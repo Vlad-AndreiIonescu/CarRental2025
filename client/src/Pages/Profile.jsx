@@ -16,7 +16,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/me", {
+        const res = await fetch("https://carrental2025.onrender.com/api/auth/me", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -31,7 +31,7 @@ const Profile = () => {
 
     const fetchOrders = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/order/my-orders", {
+        const res = await fetch("https://carrental2025.onrender.com/api/order/my-orders", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json"
@@ -51,7 +51,7 @@ const Profile = () => {
   const processRefund = async ({ orderId, paymentIntentId, totalPrice }, refundType) => {
     setShowRefundModal(false);
     try {
-      const res = await fetch("http://localhost:5000/api/stripe/refund", {
+      const res = await fetch("https://carrental2025.onrender.com/api/stripe/refund", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

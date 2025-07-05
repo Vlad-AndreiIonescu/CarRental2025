@@ -14,7 +14,7 @@ const PaymentSuccess = () => {
     const fetchOrder = async () => {
       if (!sessionId) return;
       try {
-        const res = await fetch(`http://localhost:5000/api/stripe/order-details?session_id=${sessionId}`);
+        const res = await fetch(`https://carrental2025.onrender.com/api/stripe/order-details?session_id=${sessionId}`);
         const data = await res.json();
         setOrder(data.order);
       } catch (err) {
