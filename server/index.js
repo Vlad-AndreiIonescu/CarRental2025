@@ -27,9 +27,9 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: "https://car-rental2025.vercel.app",
-    credentials: true,
-  }));
+  origin: "*", // pentru testare, dar nu e recomandat în producție
+  credentials: true
+}));
 
 
 // API Routes
