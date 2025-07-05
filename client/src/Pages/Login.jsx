@@ -25,9 +25,10 @@ const Login = () => {
     }
 
     try {
-      axios.post("https://carrental2025.onrender.com/api/auth/login", formData, {
-  withCredentials: true
-});
+      const response = await axios.post("https://carrental2025.onrender.com/api/auth/login", formData, {
+        withCredentials: true
+      });
+
       const token = response.data.token;
       const decodedUser = jwtDecode(token);
 
