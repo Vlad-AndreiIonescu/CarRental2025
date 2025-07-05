@@ -6,7 +6,7 @@ const RightSection = ({ car, pickupLocation, handleCitySelect, majorCities, mapC
   <div className="bg-gray-100 p-6 shadow-md rounded-lg space-y-6 sticky top-20 self-start">
 
       <div>
-        <h2 className="text-xl font-bold mb-4">Start Your Rental</h2>
+        <h2 className="text-xl font-bold mb-4">Începe inchirierea</h2>
         <RentForm
           car={car}                    
           pickupLocation={pickupLocation}

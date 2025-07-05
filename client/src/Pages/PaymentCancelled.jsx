@@ -8,7 +8,7 @@ const PaymentCancelled = () => {
       {/* Navbar */}
       <nav className="bg-white shadow-md px-6 py-4">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold text-blue-600">CarRentalPro</h1>
+          <h1 className="text-xl font-bold text-blue-600">CarLux</h1>
           <button
             onClick={() => navigate("/")}
             className="text-blue-600 hover:underline"

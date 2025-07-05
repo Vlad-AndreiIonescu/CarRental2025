@@ -14,7 +14,9 @@ import Payment from "./Pages/Payment";
 import GoogleMapsProvider from "./Components/GoogleMapsProvider"; 
 import PaymentSuccess from "./Pages/PaymentSuccess";
 import PaymentCancelled from "./Pages/PaymentCancelled";
-
+import Landing from "./Pages/Landing"; 
+import CarComparePage from "./Pages/CarComparePage"; 
+import AdminLayout from "./Pages/AdminLayout";
 const center = { lat: 44.4268, lng: 26.1025 }; // Bucharest
 
 // Exemple de mașini (cu locații fictive)
@@ -85,9 +87,19 @@ const App = () => {
     <>
       <GoogleMapsProvider>
       <Router>
-      <ToastContainer autoClose={1000}  /> 
+      <ToastContainer
+    position="top-center"
+    autoClose={3000}
+    hideProgressBar={false}
+    newestOnTop
+    closeOnClick
+    pauseOnHover
+    draggable
+  />
         <Routes>
-          <Route path="/" element={<Home />} />
+           <Route path="/" element={<Landing />} />
+           <Route path="/home" element={<Home />} />
+           <Route path="/compara" element={<CarComparePage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
@@ -97,7 +109,7 @@ const App = () => {
           <Route path="/payment" element={<Payment />} />
           <Route path="/payment-success" element={<PaymentSuccess/>} />
           <Route path="/payment-cancelled" element={<PaymentCancelled/>} />
-        </Routes>
+<Route path="/admin-preview" element={<AdminLayout />} />        </Routes>
       </Router>
       </GoogleMapsProvider>
     </>

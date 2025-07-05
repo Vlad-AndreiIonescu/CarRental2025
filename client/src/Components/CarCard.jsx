@@ -5,9 +5,10 @@ const CarCard = ({ car }) => (
     <div>
       <div className="relative h-48 bg-gray-200">
         <img 
-          src={car.image} 
+          src={car.image || "/default-car.png"}
           alt={`${car.make} ${car.model}`} 
           className="w-full h-full object-cover"
+          onError={(e) => { e.target.src = "/default-car.png"; }}
         />
         <div className="absolute top-2 right-2 bg-amber-500 text-white px-2 py-1 rounded-md text-sm font-medium">
           {car.pricePerDay}€/zi

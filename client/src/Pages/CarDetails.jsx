@@ -4,6 +4,8 @@ import Navbar from "../Components/Navbar";
 import LeftSection from "../Components/LeftSection";
 import RightSection from "../Components/RightSection";
 import { toast } from "react-toastify";
+import { submitReview } from "../utils/review";
+import { calculateDistance } from "../utils/geo";
 
 const CarDetails = () => {
   const { id } = useParams();
@@ -25,23 +27,14 @@ const CarDetails = () => {
 
 const handleAddReview = async (newReview) => {
   try {
-    const response = await fetch(`/api/cars/${id}/reviews`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newReview),
-    });
-
-    if (!response.ok) throw new Error("Failed to add review");
-
-    const updatedCar = await response.json();
-    setReviews(updatedCar.reviews || []);
+    const updatedReviews = await submitReview(id, newReview);
+    setReviews(updatedReviews);
     toast.success("Review submitted successfully!");
   } catch (error) {
     console.error(error);
     toast.error("Failed to submit review");
   }
 };
-
   useEffect(() => {
     const fetchCar = async () => {
       try {
@@ -74,24 +67,11 @@ const handleAddReview = async (newReview) => {
     const clickedLat = e.latLng.lat();
     const clickedLng = e.latLng.lng();
 
-    const toRadians = (deg) => (deg * Math.PI) / 180;
-
-    const distance = (lat1, lng1, lat2, lng2) => {
-      const dLat = toRadians(lat2 - lat1);
-      const dLng = toRadians(lng2 - lng1); // ✅ corect aici!
-      const a =
-        Math.sin(dLat / 2) ** 2 +
-        Math.cos(toRadians(lat1)) *
-        Math.cos(toRadians(lat2)) *
-        Math.sin(dLng / 2) ** 2;
-      return 6371 * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))); // în km
-    };
-
     let closestCity = null;
     let minDistance = Infinity;
 
     for (const city of majorCities) {
-      const dist = distance(clickedLat, clickedLng, city.lat, city.lng);
+      const dist = calculateDistance(clickedLat, clickedLng, city.lat, city.lng);
       if (dist <= 15) {
         setPickupLocation(city.name);
         setMapCenter({ lat: clickedLat, lng: clickedLng });
@@ -103,7 +83,6 @@ const handleAddReview = async (newReview) => {
       }
     }
 
-    // Dacă e prea departe de orice oraș cu sediu
     if (closestCity) {
       toast.warn(`Locația aleasă este prea departe. Am setat orașul cel mai apropiat: ${closestCity.name}`);
       setPickupLocation(closestCity.name);

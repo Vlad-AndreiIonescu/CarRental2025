@@ -4,26 +4,26 @@ import AccordionItemReviews from "./AccordionItemReviews";
 const CarDetailsAccordion = ({ car, reviews, handleAddReview}) =>{
   return (
     <div className="space-y-4">
-      <AccordionItem title="General Info">
+      <AccordionItem title="Informatii Generale">
         <ul className="text-gray-700 space-y-2">
-          <li><strong>Make:</strong> {car.make}</li>
+          <li><strong>Marcă:</strong> {car.make}</li>
           <li><strong>Model:</strong> {car.model}</li>
-          <li><strong>Year:</strong> {car.year}</li>
-          <li><strong>Fuel Type:</strong> {car.fuelType}</li>
+          <li><strong>An:</strong> {car.year}</li>
+          <li><strong>Combustibil:</strong> {car.fuelType}</li>
         </ul>
       </AccordionItem>
 
-      <AccordionItem title="Performance">
+      <AccordionItem title="Performanta">
         <ul className="text-gray-700 space-y-2">
-          <li><strong>Transmission:</strong> {car.transmission}</li>
-          <li><strong>Horsepower:</strong> {car.horsepower} HP</li>
+          <li><strong>Cutie de viteze:</strong> {car.transmission}</li>
+          <li><strong>Cai Putere:</strong> {car.horsepower} CP</li>
         </ul>
       </AccordionItem>
 
-      <AccordionItem title="Rental Info">
+      <AccordionItem title="Informatii despre inchiriere">
         <ul className="text-gray-700 space-y-2">
-          <li><strong>Price/Day:</strong> ${car.pricePerDay}</li>
-          <li><strong>Mileage:</strong> {car.mileage} km</li>
+          <li><strong>Pret pe zi:</strong> {car.pricePerDay} €</li>
+          <li><strong>Kilometraj:</strong> {car.mileage}</li>
         </ul>
       </AccordionItem>
 

@@ -34,7 +34,7 @@ const Navbar = () => {
           className="text-2xl font-bold tracking-wide cursor-pointer"
           onClick={() => navigate("/")}
         >
-          <span className="text-amber-400">LUX</span>RENTALS
+          <span className="text-amber-400">CAR</span>LUX
         </h1>
         <div className="relative space-x-4">
           {location.pathname !== "/" && (

@@ -24,7 +24,11 @@ const Register = () => {
       toast.success("Înregistrare reușită! Redirecționare...");
       setTimeout(() => navigate("/login"), 1000);
     } catch (err) {
-      toast.error(err.response?.data?.error || "Înregistrare eșuată.");
+      toast.error(
+        err.response?.data?.error ||
+        err.response?.data?.message ||
+        "Înregistrare eșuată."
+      );
     }
   };
 
@@ -32,7 +36,7 @@ const Register = () => {
     <div className="min-h-screen bg-black flex items-center justify-center">
       <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md">
         <h1 className="text-3xl font-bold text-center mb-6">
-          <span className="text-amber-400">LUX</span>RENTALS Register
+          <span className="text-amber-400">CAR</span>LUX Register
         </h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input

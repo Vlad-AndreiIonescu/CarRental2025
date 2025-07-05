@@ -9,7 +9,7 @@ export const generateInvoicePdfBuffer = async (order, user) => {
   // Header
   doc.font("Helvetica-Bold")
     .fontSize(20)
-    .text("Factura CarRentalPro", { align: "center" })
+    .text("Factura CarLux", { align: "center" })
     .moveDown(1.5);
 
   // Client & Booking Info

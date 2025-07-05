@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const orderSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // Asta trebuie să corespundă cu modelul tău de utilizator
+    ref: "User", 
     required: true,
   },
   car: {
@@ -15,6 +15,10 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  returnLocation: {
+    type: String,
+    required: true,
+  } ,
   pickupDate: {
     type: Date,
     required: true,
@@ -45,6 +49,8 @@ const orderSchema = new mongoose.Schema({
     type: String,
     enum: ['money', 'credit'],
   },
+  discountCode: { type: String }
+
 }, { timestamps: true });
 
 const Order = mongoose.model('Order', orderSchema);

@@ -28,18 +28,19 @@ const PaymentSuccess = () => {
     const doc = new jsPDF();
     doc.setFont("helvetica", "");
     doc.setFontSize(18);
-    doc.text("Confirmare Plată - LuxRentals", 105, 20, { align: "center" });
+    doc.text("Confirmare Plata - CARLUX", 105, 20, { align: "center" });
 
     const tableData = [
       ["Nume Client", order.customerName],
-      ["ID Comandă", order._id],
-      ["Locație Ridicare", order.pickupLocation],
+      ["ID Comanda", order._id],
+      ["Locatie Ridicare", order.pickupLocation],
+      ["Locatie Returnare", order.returnLocation],
       ["Data Preluare", new Date(order.pickupDate).toLocaleString()],
       ["Data Returnare", new Date(order.returnDate).toLocaleString()],
       ["Status", order.status],
-      ["Mașină", `${order.car.make} ${order.car.model}`],
-      ["An fabricație", order.car.year],
-      ["Preț/zi", `€${order.car.pricePerDay}`],
+      ["Masina", `${order.car.make} ${order.car.model}`],
+      ["An fabricatie", order.car.year],
+      ["Pret/zi", `€${order.car.pricePerDay}`],
     ];
 
     autoTable(doc, {
@@ -47,20 +48,22 @@ const PaymentSuccess = () => {
       head: [["Detaliu", "Valoare"]],
       body: tableData,
       styles: { halign: "left" },
+       headStyles: { fillColor: [255, 153, 0], textColor: [255, 255, 255] }, // fundal galben, text alb
     });
 
     if (order.extras?.length > 0) {
       const extras = order.extras.map((e) => [e.name, `€${e.price}`]);
       autoTable(doc, {
         startY: doc.lastAutoTable.finalY + 10,
-        head: [["Extra-opțiuni", "Preț"]],
+        head: [["Extra-optiuni", "Pret"]],
         body: extras,
         styles: { halign: "left" },
+        headStyles: { fillColor: [255, 153, 0], textColor: [255, 255, 255] }, // fundal galben, text alb
       });
     }
 
     doc.setFontSize(14);
-    doc.text(`Total Plătit: €${order.totalPrice}`, 105, doc.lastAutoTable.finalY + 20, { align: "center" });
+    doc.text(`Total Platit: €${order.totalPrice}`, 105, doc.lastAutoTable.finalY + 20, { align: "center" });
     doc.save("Factura_Confirmare_Plata.pdf");
   };
 
@@ -78,6 +81,7 @@ const PaymentSuccess = () => {
               <tr><td className="font-semibold py-2 pr-4">Nume Client</td><td>{order.customerName}</td></tr>
               <tr><td className="font-semibold py-2 pr-4">ID Comandă</td><td>{order._id}</td></tr>
               <tr><td className="font-semibold py-2 pr-4">Locație Ridicare</td><td>{order.pickupLocation}</td></tr>
+              <tr><td className="font-semibold py-2 pr-4">Locație Returnare</td><td>{order.returnLocation}</td></tr>
               <tr><td className="font-semibold py-2 pr-4">Data Preluare</td><td>{new Date(order.pickupDate).toLocaleString()}</td></tr>
               <tr><td className="font-semibold py-2 pr-4">Data Returnare</td><td>{new Date(order.returnDate).toLocaleString()}</td></tr>
               <tr><td className="font-semibold py-2 pr-4">Status</td><td>{order.status}</td></tr>

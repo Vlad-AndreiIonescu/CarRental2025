@@ -129,7 +129,8 @@ const Profile = () => {
                 <thead className="bg-amber-100">
                   <tr>
                     <th className="px-4 py-2">Mașină</th>
-                    <th className="px-4 py-2">Locație</th>
+                    <th className="px-4 py-2">Locație de preluare</th>
+                    <th className="px-4 py-2">Locație de returnare</th>
                     <th className="px-4 py-2">Perioadă</th>
                     <th className="px-4 py-2">Total</th>
                     <th className="px-4 py-2">Status</th>
@@ -142,6 +143,8 @@ const Profile = () => {
                       <tr key={order._id} className={idx % 2 === 0 ? "bg-gray-50" : "bg-white"}>
                         <td className="px-4 py-2 text-center">{order.car?.make} {order.car?.model}</td>
                         <td className="px-4 py-2 text-center">{order.pickupLocation}</td>
+                        <td className="px-4 py-2 text-center">{order.returnLocation}</td>
+
                         <td className="px-4 py-2 text-center">
                           {new Date(order.pickupDate).toLocaleDateString()} - {new Date(order.returnDate).toLocaleDateString()}
                         </td>
@@ -168,24 +171,27 @@ const Profile = () => {
                               const doc = new jsPDF();
                               doc.setFont("helvetica");
                               doc.setFontSize(18);
-                              doc.text("Confirmare Plată - LUXRENTALS", 105, 20, { align: "center" });
+                              doc.text("Confirmare Plata - CARLUX", 105, 20, { align: "center" });
                               const body = [
                                 ["Nume Client", order.customerName || user?.name || user?.email || "Anonim"],
-                                ["ID Comandă", order._id],
-                                ["Locație Ridicare", order.pickupLocation],
+                                ["ID Comanda", order._id],
+                                ["Locatie Ridicare", order.pickupLocation],
+                                ["Locatie Returnare", order.returnLocation],
                                 ["Data Preluare", new Date(order.pickupDate).toLocaleString()],
                                 ["Data Returnare", new Date(order.returnDate).toLocaleString()],
                                 ["Status", order.status],
                               ];
                               if (order.car) {
-                                body.push(["Mașină", `${order.car.make} ${order.car.model}`]);
-                                body.push(["An fabricație", order.car.year]);
-                                body.push(["Preț/zi", `€${order.car.pricePerDay}`]);
+                                body.push(["Masina", `${order.car.make} ${order.car.model}`]);
+                                body.push(["An fabricatie", order.car.year]);
+                                body.push(["Pret/zi", `€${order.car.pricePerDay}`]);
                               }
                               autoTable(doc, {
                                 startY: 30,
                                 head: [["Detaliu", "Valoare"]],
                                 body,
+                                       headStyles: { fillColor: [255, 153, 0], textColor: [255, 255, 255] }, // fundal galben, text alb
+
                               });
                               if (order.extras?.length) {
                                 const extras = order.extras.map((e) => [e.name, `€${e.price}`]);
@@ -196,7 +202,7 @@ const Profile = () => {
                                 });
                               }
                               doc.setFontSize(14);
-                              doc.text(`Total Plătit: €${order.totalPrice}`, 105, doc.lastAutoTable.finalY + 20, { align: "center" });
+                              doc.text(`Total Platit: €${order.totalPrice}`, 105, doc.lastAutoTable.finalY + 20, { align: "center" });
                               doc.save(`Factura_${order._id}.pdf`);
                             }}
                             className="px-4 py-2 bg-amber-500 text-white rounded hover:bg-amber-600 transition-colors"

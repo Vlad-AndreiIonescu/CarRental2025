@@ -3,6 +3,9 @@ import axios from "axios";
 import CarCard from "../Components/CarCard";
 import SearchFilters from "../Components/SearchFilters";
 import Navbar from "../Components/Navbar";
+import { filterCars } from "../utils/filter";
+import { groupCarsByLocation } from "../utils/grouping";
+import { useNavigate } from "react-router-dom";
 
 // Lazy load the CarsMap component
 const CarsMap = lazy(() => import('../Components/CarsMap'));
@@ -56,64 +59,7 @@ const Home = () => {
     "Camera spate": "hasRearCamera"
   };
 
-  const filteredCars = cars.filter((car) => {
-    const matchesSearch = !filters.search ||
-      car.make.toLowerCase().includes(filters.search.toLowerCase()) ||
-      car.model.toLowerCase().includes(filters.search.toLowerCase());
-
-    const matchesBrand = filters.brand.length === 0 || filters.brand.includes(car.make);
-    const matchesType = filters.carType.length === 0 || filters.carType.includes(car.type);
-    const matchesFuel = filters.fuelType.length === 0 || filters.fuelType.includes(car.fuelType);
-    const matchesTransmission = filters.transmission.length === 0 || filters.transmission.includes(car.transmission);
-    const matchesYear = !filters.year || car.year === Number(filters.year);
-    const matchesPrice = car.pricePerDay >= filters.priceRange[0] && car.pricePerDay <= filters.priceRange[1];
-
-    const matchesHorsepower = (() => {
-      if (!filters.horsepowerRange) return true;
-      const hp = car.horsepower || 0;
-      switch (filters.horsepowerRange) {
-        case "<100": return hp < 100;
-        case "100-200": return hp >= 100 && hp <= 200;
-        case "201-300": return hp > 200 && hp <= 300;
-        case ">300": return hp > 300;
-        default: return true;
-      }
-    })();
-
-    const matchesFeatures = Object.keys(filters.features).length === 0 ||
-      Object.entries(filters.features).every(([uiFeature, isSelected]) =>
-        !isSelected || car[featuresMap[uiFeature]] === true
-      );
-
-    return (
-      matchesSearch &&
-      matchesBrand &&
-      matchesType &&
-      matchesFuel &&
-      matchesTransmission &&
-      matchesYear &&
-      matchesPrice &&
-      matchesHorsepower &&
-      matchesFeatures
-    );
-  });
-
-  // Grupează mașinile după locație
-  const groupCarsByLocation = (cars) => {
-    const groups = {};
-    cars.forEach(car => {
-      const key = `${car.location.lat.toFixed(4)}_${car.location.lng.toFixed(4)}`;
-      if (!groups[key]) {
-        groups[key] = {
-          location: car.location,
-          cars: []
-        };
-      }
-      groups[key].cars.push(car);
-    });
-    return Object.values(groups);
-  };
-
+  const filteredCars = filterCars(cars, filters, featuresMap);
   const locationGroups = groupCarsByLocation(filteredCars);
 
   // Pagination logic
@@ -126,6 +72,8 @@ const Home = () => {
   const goToPrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
   const goToNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const goToPage = (page) => setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+
+  const navigate = useNavigate(); // Adaugă înainte de return
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -164,6 +112,25 @@ const Home = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                     </svg>
                     {showMap ? 'Afișează lista' : 'Afișează pe hartă'}
+                  </button>
+                  <button
+                    onClick={() => navigate("/compara")}
+                    className="flex items-center gap-2 px-4 py-2 rounded-full border bg-white border-gray-300 hover:bg-gray-50 transition-colors"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M8 7h.01M12 7h.01M16 7h.01M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01"
+                      />
+                    </svg>
+                    Compară mașini
                   </button>
                   <div className="relative w-full sm:w-auto">
                     <input

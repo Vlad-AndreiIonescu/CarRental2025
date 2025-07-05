@@ -2,16 +2,15 @@
 import mongoose from 'mongoose';
 
 const carSchema = new mongoose.Schema({
-  // Identificare de bază
   make: { type: String, required: true },
   model: { type: String, required: true },
   type: { type: String, required: true},
   year: { type: Number, required: true },
   mileage: { type: String, required: true },
-  transmission: { type: String, required: true }, // Manual / Automatic
-  fuelType: { type: String }, // Benzină, Diesel, Electric, Hybrid
-  engineType: { type: String }, // V6, V8, Electric, etc.
-  driveType: { type: String }, // FWD, RWD, AWD, 4WD
+  transmission: { type: String, required: true },
+  fuelType: { type: String },
+  engineType: { type: String }, 
+  driveType: { type: String }, 
 
   // Specificații tehnice
   horsepower: { type: Number },

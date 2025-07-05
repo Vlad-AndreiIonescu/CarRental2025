@@ -24,6 +24,8 @@ const RentalSummary = () => {
 
   const [storeCredit, setStoreCredit] = useState(0);
   const [useCredit, setUseCredit] = useState(false);
+  const [discountCode, setDiscountCode] = useState("");
+const [discountApplied, setDiscountApplied] = useState(0); // valoare în euro
 
   useEffect(() => {
     const fetchCarDetails = async () => {
@@ -66,12 +68,44 @@ const RentalSummary = () => {
     setExtras(newExtras);
   };
 
+const handleApplyDiscount = async () => {
+  const token = localStorage.getItem("token");
+  const code = discountCode.trim().toUpperCase();
+
+  try {
+    const res = await fetch("/api/discount/apply", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ code })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || "Eroare la aplicarea codului");
+    }
+
+    setDiscountApplied(data.value);
+    toast.success(`Codul a fost aplicat: -€${data.value}`);
+  } catch (err) {
+    setDiscountApplied(0);
+    toast.error(err.message);
+  }
+};
+
   const selectedExtras = extras.filter((extra) => extra.selected);
   const extrasTotal = selectedExtras.reduce((acc, extra) => acc + extra.price, 0);
   const rentalTotal = (booking.car.pricePerDay || 0) * booking.rentalDays;
   const totalPriceBeforeApplying = rentalTotal + extrasTotal;
   const creditToUse = useCredit ? Math.min(storeCredit, totalPriceBeforeApplying) : 0;
   const remainingToPayAfterApplying = (totalPriceBeforeApplying - creditToUse).toFixed(2);
+  const finalTotal = (remainingToPayAfterApplying - discountApplied >= 0
+  ? remainingToPayAfterApplying - discountApplied
+  : 0
+).toFixed(2);
 
  const handleProceedToPayment = async () => {
   const token = localStorage.getItem("token");
@@ -91,6 +125,7 @@ const RentalSummary = () => {
       body: JSON.stringify({
         car: booking.car._id,
         pickupLocation: booking.pickupLocation,
+        returnLocation: booking.returnLocation,
         pickupDate: booking.pickupDate,
         returnDate: booking.returnDate,
         extras: selectedExtras,
@@ -99,6 +134,8 @@ const RentalSummary = () => {
         remainingToPayAfterApplying,
         useCredit,
         creditUsed: useCredit ? creditToUse : 0,
+         discountCode,              // ex: "VIP25"
+    discountValue: discountApplied  // ex: 25 (euro)
       }),
     });
 
@@ -128,7 +165,8 @@ const RentalSummary = () => {
 
       <div className="shadow-md rounded-lg p-6 bg-white">
         <h2 className="text-2xl font-bold mb-4">📋 Rezumat Închiriere</h2>
-        <p><strong>Locație:</strong> {booking.pickupLocation}</p>
+        <p><strong>Locație Preluare:</strong> {booking.pickupLocation}</p>
+        <p><strong>Locație Returnare:</strong> {booking.returnLocation}</p>
         <p><strong>Data Preluare:</strong> {new Date(booking.pickupDate).toLocaleString()}</p>
         <p><strong>Data Returnare:</strong> {new Date(booking.returnDate).toLocaleString()}</p>
         <p><strong>Zile:</strong> {booking.rentalDays}</p>
@@ -146,10 +184,18 @@ const RentalSummary = () => {
 
         <hr className="my-4" />
         <div className="text-lg font-semibold">
-          Total: <span className={`${useCredit && creditToUse > 0 ? 'line-through text-red-600 mr-2' : ''}`}>€{totalPriceBeforeApplying.toFixed(2)}</span>
-          {useCredit && creditToUse > 0 && (
-            <span className="text-green-600 font-bold">€{remainingToPayAfterApplying}</span>
-          )}
+          Total: <div className="text-lg font-semibold mt-4">
+  Total:{" "}
+  <span
+    className={`${(useCredit || discountApplied) ? 'line-through text-red-600 mr-2' : ''}`}
+  >
+    €{totalPriceBeforeApplying.toFixed(2)}
+  </span>
+
+  {(useCredit || discountApplied) && (
+    <span className="text-green-600 font-bold">€{finalTotal}</span>
+  )}
+</div>
         </div>
 
         {storeCredit > 0 && (
@@ -170,6 +216,28 @@ const RentalSummary = () => {
             )}
           </div>
         )}
+        <div className="mt-4">
+  <label className="font-semibold block mb-1">Cod Discount</label>
+  <div className="flex gap-2">
+    <input
+      type="text"
+      value={discountCode}
+      onChange={(e) => setDiscountCode(e.target.value)}
+      placeholder="Introdu codul aici"
+      className="flex-1 border border-gray-300 px-3 py-2 rounded"
+    />
+    <button
+      onClick={handleApplyDiscount}
+      className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded"
+    >
+      Aplică
+    </button>
+  </div>
+  {discountApplied > 0 && (
+    <p className="text-green-600 text-sm mt-1">Reducere aplicată: -€{discountApplied}</p>
+  )}
+</div>
+
 
         <button
           onClick={handleProceedToPayment}

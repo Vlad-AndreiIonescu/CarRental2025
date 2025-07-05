@@ -21,6 +21,7 @@ router.post("/create-checkout-session", authMiddleware, async (req, res) => {
     const {
       car,
       pickupLocation,
+      returnLocation,
       pickupDate,
       returnDate,
       rentalDays,
@@ -55,6 +56,7 @@ router.post("/create-checkout-session", authMiddleware, async (req, res) => {
         userId,
         car,
         pickupLocation,
+          returnLocation,
         pickupDate,
         returnDate,
         rentalDays,
@@ -80,54 +82,71 @@ router.get("/order-details", async (req, res) => {
     });
 
     const paymentIntentId = session.payment_intent;
-
     const meta = session.metadata;
 
-    // 1. Verificare dacă comanda există deja (anti-duplicat)
+    // 1. Verificare dacă comanda există deja
     const existingOrder = await Order.findOne({ sessionId: session.id }).populate("user car");
     if (existingOrder) {
       return res.status(200).json({ order: existingOrder });
     }
 
-    // 2. Verificare dacă plata a fost finalizată
+    // 2. Verificare plată
     if (session.payment_status !== "paid") {
       return res.status(400).json({ error: "Plata nu este confirmată." });
     }
 
-    // 3. Nume client din datele Stripe introduse la checkout
-    const stripeName = session.customer_details?.name || "Client Stripe";
+    // 3. Blochează codurile de discount deja folosite de același user
+    if (meta.discountCode) {
+      const alreadyUsed = await Order.findOne({
+        user: meta.userId,
+        discountCode: meta.discountCode,
+        status: "paid",
+      });
+
+      if (alreadyUsed) {
+        return res.status(400).json({ error: "Ai folosit deja acest cod de discount." });
+      }
+    }
 
     // 4. Creează comanda
+    const stripeName = session.customer_details?.name || "Client Stripe";
     const order = await Order.create({
       sessionId: session.id,
       paymentIntentId,
       user: meta.userId,
       car: meta.car,
       pickupLocation: meta.pickupLocation,
+      returnLocation: meta.returnLocation,
       pickupDate: meta.pickupDate,
       returnDate: meta.returnDate,
       rentalDays: meta.rentalDays,
       extras: JSON.parse(meta.extras),
       totalPrice: meta.remainingToPayAfterApplying,
-      customerName: stripeName, // nou adăugat
+      customerName: stripeName,
+      discountCode: meta.discountCode || null,
       status: "paid",
     });
 
-    // 5. Returnează comanda populată complet
+    if (meta.discountCode) {
+      const user = await User.findById(meta.userId);
+      if (user && !user.usedDiscountCodes?.includes(meta.discountCode)) {
+        user.usedDiscountCodes.push(meta.discountCode);
+        await user.save();
+      }
+    }
+    // 5. Trimite comanda către frontend
     const populated = await Order.findById(order._id).populate("user car");
     res.status(200).json({ order: populated });
 
+    // 6. Trimite email cu PDF
     try {
       const user = await User.findById(meta.userId);
       if (user?.email) {
         const emailContent = generateEmailHtml(user, populated, meta);
         const invoiceBuffer = await generateInvoicePdfBuffer(populated, user);
-    
-        await sendEmail(user.email, "Rezervarea ta CarRentalPro", emailContent, [
-          {
-            filename: "Factura-CarRentalPro.pdf",
-            content: invoiceBuffer,
-          },
+
+        await sendEmail(user.email, "Rezervarea ta CarLux", emailContent, [
+          { filename: "Factura-CarLux.pdf", content: invoiceBuffer },
         ]);
       }
     } catch (emailErr) {
@@ -139,6 +158,7 @@ router.get("/order-details", async (req, res) => {
     res.status(500).json({ error: "Eroare la obținerea comenzii." });
   }
 });
+
 
 router.post("/refund", authMiddleware, async (req, res) => {
   try {

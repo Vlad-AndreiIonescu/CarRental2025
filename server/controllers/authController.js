@@ -2,6 +2,8 @@ import User from '../models/user.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import createError from '../utils/createError.js';
+import sendEmail from "../utils/sendEmail.js";
+import { generateWelcomeEmail } from "../utils/emailTemplates.js"; // creezi asta jos
 
 export const registerUser = async (req, res, next) => {
     try {
@@ -29,6 +31,21 @@ export const registerUser = async (req, res, next) => {
 
         const newUser = new User({ name, email, password: hashedPassword });
         await newUser.save();
+
+        // ➕ Cod discount (poți schimba cu generare dinamică dacă vrei)
+        const discountCode = "WELCOME15";
+
+        // 📨 Trimite email
+        try {
+          const html = generateWelcomeEmail(newUser, discountCode);
+          await sendEmail(
+            newUser.email,
+            "Bun venit la CarLux!",
+            html
+          );
+        } catch (err) {
+          console.warn(" Trimitere e-mail eșuată:", err.message);
+        }
 
         res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
@@ -76,7 +93,7 @@ export const loginUser = async (req, res, next) => {
 
         const user = await User.findOne({ email });
         if (!user) {
-            return next(createError('User not found', 404));
+            return next(createError('Contul nu a fost gasit', 404));
         }
 
         const isPasswordCorrect = bcrypt.compareSync(password, user.password);
