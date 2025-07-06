@@ -32,7 +32,7 @@ const Home = () => {
     const fetchCars = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("/api/cars");
+        const response = await axios.get("https://carrental2025.onrender.com/api/cars");
         setCars(response.data.map(car => ({
           ...car,
           // Asigură-te că fiecare mașină are locație

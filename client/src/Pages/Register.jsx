@@ -20,7 +20,7 @@ const Register = () => {
     }
 
     try {
-      await axios.post("/api/auth/register", formData);
+      await axios.post("https://carrental2025.onrender.com/api/auth/register", formData);
       toast.success("Înregistrare reușită! Redirecționare...");
       setTimeout(() => navigate("/login"), 1000);
     } catch (err) {

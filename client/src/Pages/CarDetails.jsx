@@ -38,7 +38,7 @@ const handleAddReview = async (newReview) => {
   useEffect(() => {
     const fetchCar = async () => {
       try {
-        const response = await fetch(`/api/cars/${id}`);
+        const response = await fetch(`https://carrental2025.onrender.com/api/cars/${id}`);
         const data = await response.json();
         setCar(data);
         setReviews(data.reviews || []);

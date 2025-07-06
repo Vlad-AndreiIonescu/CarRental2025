@@ -48,7 +48,7 @@ const CarComparePage = () => {
   const [car2, setCar2] = useState(null);
 
   useEffect(() => {
-    axios.get("/api/cars").then((res) => setCars(res.data));
+    axios.get("https://carrental2025.onrender.com/api/cars").then((res) => setCars(res.data));
   }, []);
 
   /* ---------- helper pentru clasă culoare ---------- */
