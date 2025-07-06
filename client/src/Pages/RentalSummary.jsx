@@ -10,16 +10,16 @@ const RentalSummary = () => {
   const [booking, setBooking] = useState(state);
 
   const [extras, setExtras] = useState([
-    { name: "Protecție Totală (Zero Franșiză)", price: 12, selected: false },
-    { name: "Returnare fără Curățare", price: 8, selected: false },
-    { name: "Asigurare Suplimentară", price: 15, selected: false },
-    { name: "Șofer Adițional", price: 10, selected: false },
+    { name: "Protectie Totala (Zero Fransiza)", price: 12, selected: false },
+    { name: "Returnare fara Curatare", price: 8, selected: false },
+    { name: "Asigurare Suplimentara", price: 15, selected: false },
+    { name: "Sofer Aditional", price: 10, selected: false },
     { name: "GPS Inclus", price: 7, selected: false },
     { name: "Scaun pentru Copii", price: 6, selected: false },
-    { name: "Lanțuri de Zăpadă", price: 5, selected: false },
+    { name: "Lanturi de Zapada", price: 5, selected: false },
     { name: "Asigurare Furt/Avarii", price: 9, selected: false },
-    { name: "Wi-Fi în Mașină", price: 4, selected: false },
-    { name: "Asistență Rutieră Premium", price: 6, selected: false },
+    { name: "Wi-Fi in Masina", price: 4, selected: false },
+    { name: "Asistenta Rutiera Premium", price: 6, selected: false },
   ]);
 
   const [storeCredit, setStoreCredit] = useState(0);

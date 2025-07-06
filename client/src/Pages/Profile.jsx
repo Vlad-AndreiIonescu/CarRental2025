@@ -197,8 +197,9 @@ const Profile = () => {
                                 const extras = order.extras.map((e) => [e.name, `€${e.price}`]);
                                 autoTable(doc, {
                                   startY: doc.lastAutoTable.finalY + 10,
-                                  head: [["Extra-opțiuni", "Preț"]],
+                                  head: [["Extra-opțiuni", "Pret"]],
                                   body: extras,
+                                  headStyles: { fillColor: [255, 153, 0], textColor: [255, 255, 255] }, // fundal galben, text alb
                                 });
                               }
                               doc.setFontSize(14);
