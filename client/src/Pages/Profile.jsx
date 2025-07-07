@@ -106,7 +106,7 @@ const Profile = () => {
               </div>
             </div>
             {user?.role === "admin" && (
-              <div className="w-full flex justify-end px-4 mt-4">
+              <div className="flex justify-center mt-4 md:mt-0">
                 <button
                   onClick={() => navigate("/admin-preview")}
                   className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow"
