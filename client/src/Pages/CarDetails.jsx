@@ -16,12 +16,15 @@ const CarDetails = () => {
   const [pickupLocation, setPickupLocation] = useState("");
 
   const majorCities = [
-    { name: "Bucharest", lat: 44.4268, lng: 26.1025 },
-    { name: "Cluj", lat: 46.7712, lng: 23.6236 },
-    { name: "Timisoara", lat: 45.7489, lng: 21.2087 },
-    { name: "Iasi", lat: 47.1585, lng: 27.6014 },
-    { name: "Constanta", lat: 44.1598, lng: 28.6348 },
-  ];
+  { name: "Bucuresti", lat: 44.4268, lng: 26.1025 },
+  { name: "Cluj", lat: 46.7712, lng: 23.6236 },
+  { name: "Timisoara", lat: 45.7489, lng: 21.2087 },
+  { name: "Iasi", lat: 47.1585, lng: 27.6014 },
+  { name: "Constanta", lat: 44.1598, lng: 28.6348 },
+  { name: "Ploiesti", lat: 44.9469, lng: 26.0361 },
+  { name: "Brasov", lat: 45.6556, lng: 25.6100 },
+  { name: "Sibiu", lat: 45.7983, lng: 24.1256 },
+];
 
   const [reviews, setReviews] = useState([]);
 
