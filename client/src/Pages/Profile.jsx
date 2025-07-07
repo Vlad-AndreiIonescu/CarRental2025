@@ -90,6 +90,16 @@ const Profile = () => {
       {/* Navbar */}
       <Navbar></Navbar>
 
+      {user?.role === "admin" && (
+        <div className="w-full flex justify-end px-4 mt-4">
+          <button
+            onClick={() => navigate("/admin-preview")}
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow"
+          >
+            🔐 Panou Admin
+          </button>
+        </div>
+      )}
       {/* Content */}
       <div className="w-full px-4 py-8">
         <div className="max-w-7xl mx-auto space-y-8">
