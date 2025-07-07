@@ -1,61 +1,110 @@
-export default function Orders() {
-  const orders = [
-    {
-      id: "ORD001",
-      client: "Ion Popescu",
-      date: "2025-06-10",
-      status: "Confirmată",
-      total: 180,
-    },
-    {
-      id: "ORD002",
-      client: "Ana Radu",
-      date: "2025-06-11",
-      status: "În așteptare",
-      total: 260,
-    },
-    {
-      id: "ORD003",
-      client: "Mihai Enache",
-      date: "2025-06-12",
-      status: "Anulată",
-      total: 0,
-    },
-  ];
+import { useEffect, useState } from "react";
+
+export default function Cars() {
+  const [cars, setCars] = useState([]);
+  const [form, setForm] = useState({ make: "", model: "", pricePerDay: "" });
+  const [image, setImage] = useState(null);
+
+  const fetchCars = async () => {
+    try {
+      const res = await fetch("https://carrental2025.onrender.com/api/admin/cars", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const data = await res.json();
+      setCars(data.cars || data);
+    } catch (err) {
+      console.error("Eroare la mașini:", err.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchCars();
+  }, []);
+
+  const handleSubmit = async () => {
+    try {
+      const res = await fetch("https://carrental2025.onrender.com/api/admin/cars", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ ...form, image }),
+      });
+
+      if (res.ok) {
+        const newCar = await res.json();
+        setCars((prev) => [...prev, newCar]);
+        setForm({ make: "", model: "", pricePerDay: "" });
+        setImage(null);
+      } else {
+        console.error("Eroare la salvare mașină");
+      }
+    } catch (err) {
+      console.error("Eroare la POST:", err.message);
+    }
+  };
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">📦 Comenzi</h1>
+    <div className="space-y-8">
+      <h1 className="text-3xl font-bold">🚙 Mașini</h1>
+
+      <div className="bg-white p-6 rounded shadow space-y-4">
+        <h2 className="text-xl font-semibold">Adaugă Mașină</h2>
+
+        <input
+          placeholder="Marcă"
+          className="border p-2 w-full"
+          value={form.make}
+          onChange={(e) => setForm({ ...form, make: e.target.value })}
+        />
+        <input
+          placeholder="Model"
+          className="border p-2 w-full"
+          value={form.model}
+          onChange={(e) => setForm({ ...form, model: e.target.value })}
+        />
+        <input
+          placeholder="Preț/zi (€)"
+          className="border p-2 w-full"
+          value={form.pricePerDay}
+          onChange={(e) => setForm({ ...form, pricePerDay: e.target.value })}
+        />
+
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            const reader = new FileReader();
+            reader.onload = () => setImage(reader.result);
+            reader.readAsDataURL(e.target.files[0]);
+          }}
+        />
+
+        <button
+          onClick={handleSubmit}
+          className="bg-amber-500 text-white px-6 py-2 rounded"
+        >
+          Salvează
+        </button>
+      </div>
+
       <table className="w-full text-sm bg-white rounded shadow">
         <thead>
-          <tr className="text-left border-b bg-gray-100">
-            <th className="py-2 px-3">ID</th>
-            <th>Client</th>
-            <th>Data</th>
-            <th>Status</th>
-            <th>Total</th>
+          <tr className="bg-gray-100 text-left">
+            <th className="py-2 px-3">Marcă</th>
+            <th>Model</th>
+            <th>Preț/zi</th>
           </tr>
         </thead>
         <tbody>
-          {orders.map((o) => (
-            <tr key={o.id} className="border-b hover:bg-gray-50">
-              <td className="py-2 px-3">{o.id}</td>
-              <td>{o.client}</td>
-              <td>{o.date}</td>
-              <td>
-                <span
-                  className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    o.status === "Confirmată"
-                      ? "bg-green-100 text-green-700"
-                      : o.status === "În așteptare"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : "bg-red-100 text-red-700"
-                  }`}
-                >
-                  {o.status}
-                </span>
-              </td>
-              <td>€{o.total}</td>
+          {cars.map((c) => (
+            <tr key={c._id} className="border-b">
+              <td className="py-2 px-3">{c.make}</td>
+              <td>{c.model}</td>
+              <td>€{c.pricePerDay}</td>
             </tr>
           ))}
         </tbody>
