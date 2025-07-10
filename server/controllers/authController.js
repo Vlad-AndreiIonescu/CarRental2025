@@ -128,3 +128,33 @@ export const loginUser = async (req, res, next) => {
         return next(createError(error.message || 'Error logging in', 500));
     }
 };
+
+export const getUsers = async (req, res, next) => {
+  try {
+    const users = await User.find({}).select('-password');
+    res.status(200).json(users);
+  } catch (error) {
+    next(createError('Error fetching users', 500));
+  }
+};
+
+export const updateUserRole = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+    
+    const updatedUser = await User.findByIdAndUpdate(
+      id, 
+      { role },
+      { new: true }
+    ).select('-password');
+    
+    if (!updatedUser) {
+      return next(createError('User not found', 404));
+    }
+    
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    next(createError('Error updating user role', 500));
+  }
+};  
