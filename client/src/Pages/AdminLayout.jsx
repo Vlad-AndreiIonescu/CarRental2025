@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Dashboard from "../Components/Dashboard";
 import Cars from "../Components/Cars";
 import Orders from "../Components/Orders";
@@ -7,49 +7,10 @@ import Statistics from "../Components/Statistics";
 import StatsUsers from "../Components/StatsUsers";
 import StatsOrders from "../Components/StatsOrders";
 import StatsCars from "../Components/StatsCars";
-import axios from "axios";
 
 export default function AdminLayout() {
   const [section, setSection] = useState("dashboard");
   const [openStats, setOpenStats] = useState(false);
-  const [statsData, setStatsData] = useState({
-    users: [],
-    orders: [],
-    cars: []
-  });
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const [usersRes, ordersRes, carsRes] = await Promise.all([
-          axios.get('/api/auth/users'),
-          axios.get('/api/order'),
-          axios.get('/api/cars')
-        ]);
-        setStatsData({
-          users: usersRes.data,
-          orders: ordersRes.data.orders,
-          cars: carsRes.data
-        });
-      } catch (error) {
-        console.error("Error fetching stats:", error);
-      }
-    };
-    fetchStats();
-  }, []);
-
-  const renderSection = () => {
-    switch (section) {
-      case "dashboard": return <Dashboard stats={statsData} />;
-      case "cars": return <Cars />;
-      case "orders": return <Orders />;
-      case "users": return <Users />;
-      case "stats-users": return <StatsUsers users={statsData.users} />;
-      case "stats-orders": return <StatsOrders orders={statsData.orders} />;
-      case "stats-cars": return <StatsCars cars={statsData.cars} />;
-      default: return <Dashboard stats={statsData} />;
-    }
-  };
 
   return (
     <div className="flex min-h-screen">
@@ -70,9 +31,15 @@ export default function AdminLayout() {
             </button>
             {openStats && (
               <div className="ml-4 space-y-1 text-sm">
-                <button onClick={() => setSection("stats-users")} className="block hover:text-amber-400">👤 Utilizatori</button>
-                <button onClick={() => setSection("stats-orders")} className="block hover:text-amber-400">📦 Comenzi</button>
-                <button onClick={() => setSection("stats-cars")} className="block hover:text-amber-400">🚗 Mașini</button>
+                <button onClick={() => setSection("stats-users")} className="block hover:text-amber-400">
+                  👤 Utilizatori
+                </button>
+                <button onClick={() => setSection("stats-orders")} className="block hover:text-amber-400">
+                  📦 Comenzi
+                </button>
+                <button onClick={() => setSection("stats-cars")} className="block hover:text-amber-400">
+                  🚗 Mașini
+                </button>
               </div>
             )}
           </div>
@@ -91,7 +58,28 @@ export default function AdminLayout() {
 
       {/* Main content */}
       <main className="flex-1 p-8 bg-gray-50 overflow-y-auto">
-        {renderSection()}
+        {/* toate componentele rămân montate */}
+        <div style={{ display: section === "dashboard" ? "block" : "none" }}>
+          <Dashboard />
+        </div>
+        <div style={{ display: section === "cars" ? "block" : "none" }}>
+          <Cars />
+        </div>
+        <div style={{ display: section === "orders" ? "block" : "none" }}>
+          <Orders />
+        </div>
+        <div style={{ display: section === "users" ? "block" : "none" }}>
+          <Users />
+        </div>
+        <div style={{ display: section === "stats-users" ? "block" : "none" }}>
+          <StatsUsers />
+        </div>
+        <div style={{ display: section === "stats-orders" ? "block" : "none" }}>
+          <StatsOrders />
+        </div>
+        <div style={{ display: section === "stats-cars" ? "block" : "none" }}>
+          <StatsCars />
+        </div>
       </main>
     </div>
   );

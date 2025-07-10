@@ -13,10 +13,10 @@ const router = express.Router();
 
 router.get('/', getAllCars);
 router.get('/:id', getCarById);
-router.post('/', authMiddleware, createCar);
-router.put('/:id', authMiddleware, updateCar);
-router.patch('/:id', authMiddleware, updateCar);
-router.delete('/:id', authMiddleware, deleteCar);
-router.post('/:id/reviews', addReviewToCar);
+router.post('/',  createCar);
+router.put('/:id',  updateCar);
+router.patch('/:id',  updateCar);
+router.delete('/:id', deleteCar);
+router.post('/:id/reviews', addReviewToCar);  
 
 export default router;

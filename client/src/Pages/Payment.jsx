@@ -50,7 +50,7 @@ const Payment = () => {
       const orderId = data._id;
   
       // 2. Trimite către backend ca să creeze sesiunea Stripe
-      const stripeRes = await fetch("https://carrental2025.onrender.com/api/stripe/create-checkout-session", {
+      const stripeRes = await fetch("http://localhost:5000/api/stripe/create-checkout-session", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

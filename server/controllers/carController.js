@@ -36,8 +36,9 @@ export const createCar = async (req, res, next) => {
     await newCar.save();
     res.status(201).json(newCar);
   } catch (error) {
-    next(createError("Error creating car", 500));
-  }
+  console.error("CREATE CAR ERROR:", error.message);
+  next(createError("Error creating car", 500));
+}
 };
 export const updateCar = async (req, res, next) => {
   try {
@@ -62,11 +63,12 @@ export const deleteCar = async (req, res, next) => {
     if (!deletedCar) {
       return next(createError("Car not found", 404));
     }
-    res.status(204).send().json({ message: "Car deleted successfully" });
+    res.status(200).json({ message: "Car deleted successfully" }); // 🔧 aici e schimbarea
   } catch (error) {
     next(createError("Error deleting car", 500));
   }
 };
+
 
 export const addReviewToCar = async (req, res, next) => {
   try {

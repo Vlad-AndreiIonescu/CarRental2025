@@ -2,12 +2,11 @@
 import mongoose from 'mongoose';
 
 const carSchema = new mongoose.Schema({
-  make: { type: String, required: true },
-  model: { type: String, required: true },
-  type: { type: String, required: true},
-  year: { type: Number, required: true },
-  mileage: { type: String, required: true },
-  transmission: { type: String, required: true },
+  make: { type: String},
+  type: { type: String},
+  year: { type: Number},
+  mileage: { type: String},
+  transmission: { type: String},
   fuelType: { type: String },
   engineType: { type: String }, 
   driveType: { type: String }, 
@@ -39,8 +38,8 @@ const carSchema = new mongoose.Schema({
 
   // Locație și disponibilitate
   location: {
-    lat: { type: Number, required: true },
-    lng: { type: Number, required: true },
+    lat: { type: Number},
+    lng: { type: Number },
   },
   city: { type: String },
   region: { type: String },
@@ -50,7 +49,7 @@ const carSchema = new mongoose.Schema({
   availableUntil: { type: Date },
 
   // Preț și închiriere
-  pricePerDay: { type: Number, required: true },
+  pricePerDay: { type: Number},
   discount: { type: Number, default: 0 },
   depositRequired: { type: Boolean, default: false },
   minRentalDays: { type: Number, default: 1 },
@@ -61,13 +60,13 @@ const carSchema = new mongoose.Schema({
   roadAssistanceIncluded: { type: Boolean, default: false },
 
   // Alte info
-  image: { type: String, required: true },
+  image: { type: String },
   description: { type: String },
   isAvailable: { type: Boolean, default: true },
   reviews: [
   {
-    rating: { type: Number, required: true },
-    comment: { type: String, required: true },
+    rating: { type: Number },
+    comment: { type: String},
     date: { type: Date, default: Date.now },
   }
 ],
