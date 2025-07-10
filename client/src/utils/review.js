@@ -1,5 +1,5 @@
 export const submitReview = async (carId, newReview) => {
-  const response = await fetch(`/api/cars/${carId}/reviews`, {
+  const response = await fetch(`https://carrental2025.onrender.com/api/cars/${carId}/reviews`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(newReview),

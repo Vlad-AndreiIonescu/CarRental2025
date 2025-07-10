@@ -17,6 +17,6 @@ router.post('/',  createCar);
 router.put('/:id',  updateCar);
 router.patch('/:id',  updateCar);
 router.delete('/:id', deleteCar);
-router.post('/:id/reviews', authMiddleware, addReviewToCar);  
+router.post('/:id/reviews', addReviewToCar);  
 
 export default router;

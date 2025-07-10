@@ -73,7 +73,7 @@ const handleApplyDiscount = async () => {
   const code = discountCode.trim().toUpperCase();
 
   try {
-    const res = await fetch("/api/discount/apply", {
+    const res = await fetch("https://carrental2025.onrender.com/api/discount/apply", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
