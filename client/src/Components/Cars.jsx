@@ -43,7 +43,7 @@ export default function Cars() {
 
   const fetchCars = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/cars", {
+      const res = await axios.get("https://carrental2025.onrender.com/api/cars", {
         withCredentials: true,
       });
       setCars(res.data);
@@ -71,11 +71,11 @@ export default function Cars() {
 
     try {
       if (editingId) {
-        await axios.put(`http://localhost:5000/api/cars/${editingId}`, payload, {
+        await axios.put(`https://carrental2025.onrender.com/api/cars/${editingId}`, payload, {
           withCredentials: true,
         });
       } else {
-        await axios.post("http://localhost:5000/api/cars", payload, {
+        await axios.post("https://carrental2025.onrender.com/api/cars", payload, {
           withCredentials: true,
         });
       }
@@ -114,7 +114,7 @@ export default function Cars() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/cars/${id}`, {
+      await axios.delete(`https://carrental2025.onrender.com/api/cars/${id}`, {
         withCredentials: true,
       });
       setCars((prev) => prev.filter((car) => car._id !== id));

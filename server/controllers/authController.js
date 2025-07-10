@@ -88,7 +88,7 @@ export const loginUser = async (req, res, next) => {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            return next(createError('Email and password are required', 400));
+            return next(createError('Emailul si parola sunt obligatorii', 400));
         }
 
         const user = await User.findOne({ email });
@@ -98,7 +98,7 @@ export const loginUser = async (req, res, next) => {
 
         const isPasswordCorrect = bcrypt.compareSync(password, user.password);
         if (!isPasswordCorrect) {
-            return next(createError('Invalid credentials', 401));
+            return next(createError('Credentiale invalide', 401));
         }
 
         // Creăm un token JWT
@@ -158,3 +158,13 @@ export const updateUserRole = async (req, res, next) => {
     next(createError('Error updating user role', 500));
   }
 };  
+
+export const getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find().sort({ createdAt: -1 });
+    res.status(200).json({ users });
+  } catch (err) {
+    console.error("Eroare la obținerea utilizatorilor:", err);
+    res.status(500).json({ message: "Eroare la obținerea utilizatorilor" });
+  }
+};

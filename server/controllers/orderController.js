@@ -3,6 +3,20 @@ import Order from "../models/order.js";
 import Car from "../models/car.js";
 import createError from "../utils/createError.js";
 
+export const getAllOrders = async (req, res, next) => {
+  try {
+    const orders = await Order.find()
+      .populate("car")  // ✅ Populează datele mașinii
+      .populate("user", "email")  // (opțional) doar emailul utilizatorului
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({ orders });
+  } catch (err) {
+    console.error("Eroare la obținerea comenzilor:", err);
+    next(createError("Eroare la obținerea comenzilor", 500));
+  }
+};
+
 export const getOrderById = async (req, res, next) => {
   try {
     const { id } = req.params;

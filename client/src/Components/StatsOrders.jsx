@@ -38,11 +38,6 @@ export default function StatsOrders() {
         <h2 className="font-semibold mb-2">Venituri lunare</h2>
         <Bar data={revenue} />
       </div>
-
-      <div className="bg-white p-4 rounded shadow">
-        <h2 className="font-semibold mb-2">Status comenzi</h2>
-        <Line data={statusLine} />
-      </div>
     </div>
   );
 }

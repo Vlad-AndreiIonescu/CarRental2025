@@ -9,6 +9,7 @@ import authRoutes from './routes/auth.js';
 import orderRoutes from "./routes/order.js";
 import stripeRoutes from "./routes/stripe.js";
 import discountRoutes from "./routes/discount.js";
+import statsRoutes from "./routes/stats.js"
 
 
 import errorMiddleware from './middlewares/errorMiddleware.js';
@@ -27,7 +28,7 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: "https://car-rental2025.vercel.app",
+  origin: "https://car-rental2025.vercel.app/",
   credentials: true
 }));
 
@@ -38,6 +39,7 @@ app.use('/api/cars', carRoutes);
 app.use('/api/order', orderRoutes);
 app.use('/api/stripe', stripeRoutes);
 app.use("/api/discount", discountRoutes);
+app.use("/api/stats", statsRoutes);
 
 app.use(errorMiddleware);
 

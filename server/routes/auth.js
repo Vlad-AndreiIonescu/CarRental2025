@@ -4,7 +4,8 @@ import {
   loginUser, 
   getMe,
   getUsers,
-  updateUserRole 
+  updateUserRole,
+  getAllUsers
 } from '../controllers/authController.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
 
@@ -12,8 +13,9 @@ const router = express.Router();
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-router.get('/me', authMiddleware, getMe);
-router.get('/users', authMiddleware, getUsers);
-router.patch('/users/:id', authMiddleware, updateUserRole);
+router.get('/me', getMe);
+router.get('/users', getUsers);
+router.patch('/users/:id', updateUserRole);
+router.get("/", getAllUsers);
 
 export default router;

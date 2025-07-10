@@ -44,7 +44,7 @@ const [discountApplied, setDiscountApplied] = useState(0); // valoare în euro
     const fetchUserCredit = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:5000/api/auth/me", {
+        const res = await fetch("https://carrental2025.onrender.com/api/auth/me", {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
@@ -116,7 +116,7 @@ const handleApplyDiscount = async () => {
   }
 
   try {
-    const response = await fetch("http://localhost:5000/api/stripe/create-checkout-session", {
+    const response = await fetch("https://carrental2025.onrender.com/api/stripe/create-checkout-session", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
