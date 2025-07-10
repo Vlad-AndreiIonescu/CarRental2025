@@ -74,15 +74,22 @@ const CarComparePage = () => {
     return (
       <div className="space-y-3 text-sm text-gray-700">
         {/* Imagine */}
-        <img
-  src={car.image || "/default-car.png"}
-  alt={`${car.make} ${car.model}`}
-  className="w-full h-48 object-contain rounded-lg border mb-2 bg-white"
-  onError={(e) => {
-    e.target.onerror = null; // previne loop infinit dacă default.png lipsește
-    e.target.src = "/default-car.png";
-  }}
-/>
+      <div className="w-full h-48 flex items-center justify-center overflow-hidden rounded-lg border mb-2 bg-white">
+  <img
+    src={car.image?.trim() ? car.image : "/default-car.png"}
+    alt={`${car.make} ${car.model}`}
+    className={
+      car.image?.trim()
+        ? "w-full h-full object-cover"
+        : "w-24 h-24 object-contain"
+    }
+    onError={(e) => {
+      e.target.onerror = null;
+      e.target.src = "/default-car.png";
+      e.target.className = "w-24 h-24 object-contain"; // ← setăm și stilul fallback-ului
+    }}
+  />
+</div>
 
         {/* General */}
         <div><strong>Marca:</strong> {car.make}</div>
