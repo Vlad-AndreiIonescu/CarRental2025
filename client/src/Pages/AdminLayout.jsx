@@ -54,6 +54,12 @@ export default function AdminLayout() {
             👥 Utilizatori
           </button>
         </nav>
+        <button
+  onClick={() => (window.location.href = "/home")}
+  className="w-full mt-10 bg-amber-500 hover:bg-amber-600 text-white py-2 rounded text-sm font-medium transition"
+>
+  🏠 Înapoi la Home
+</button>
       </aside>
 
       {/* Main content */}
