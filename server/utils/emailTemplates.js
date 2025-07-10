@@ -5,9 +5,9 @@ export const generateEmailHtml = (user, order, meta) => {
         <p>Bună, <strong>${user.name}</strong>!</p>
         <p>Rezervarea ta a fost confirmată cu succes. Detalii:</p>
         <ul style="text-align: left; display: inline-block; margin-top: 10px;">
-          <li><strong>Mașină:</strong> ${order.car.make} ${order.car.model}</li>
-          <li><strong>Locație:</strong> ${meta.pickupLocation}</li>
-          <li><strong>Returnare:</strong> ${meta.returnLocation}</li>
+          <li><strong>Mașină:</strong> ${order.car.make}</li>
+          <li><strong>Locație Preluare:</strong> ${meta.pickupLocation}</li>
+          <li><strong>Locatie Returnare:</strong> ${meta.returnLocation}</li>
           <li><strong>Preluare:</strong> ${new Date(meta.pickupDate).toLocaleString()}</li>
           <li><strong>Returnare:</strong> ${new Date(meta.returnDate).toLocaleString()}</li>
           <li><strong>Total:</strong> €${meta.remainingToPayAfterApplying}</li>
