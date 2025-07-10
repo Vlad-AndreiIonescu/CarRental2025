@@ -75,10 +75,14 @@ const CarComparePage = () => {
       <div className="space-y-3 text-sm text-gray-700">
         {/* Imagine */}
         <img
-          src={car.image || "/default-car.png"}
-          alt={`${car.make} ${car.model}`}
-          className="w-full h-48 object-cover rounded-lg border mb-2"
-        />
+  src={car.image || "/default-car.png"}
+  alt={`${car.make} ${car.model}`}
+  className="w-full h-48 object-contain rounded-lg border mb-2 bg-white"
+  onError={(e) => {
+    e.target.onerror = null; // previne loop infinit dacă default.png lipsește
+    e.target.src = "/default-car.png";
+  }}
+/>
 
         {/* General */}
         <div><strong>Marca:</strong> {car.make}</div>
