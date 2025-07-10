@@ -18,12 +18,13 @@ export const generateInvoicePdfBuffer = async (order, user) => {
   doc.text(`Email: ${user.email}`);
   doc.moveDown();
   doc.text(`Locatie ridicare: ${order.pickupLocation}`);
+  doc.text(`Locatie returnare: ${order.returnLocation}`);
   doc.text(`Data preluare: ${new Date(order.pickupDate).toLocaleString()}`);
   doc.text(`Data returnare: ${new Date(order.returnDate).toLocaleString()}`);
   doc.moveDown();
 
   // Car Info
-  doc.text(`Masina: ${order.car.make} ${order.car.model}`);
+  doc.text(`Masina: ${order.car.make}`);
   if (order.car.year) doc.text(`An fabricatie: ${order.car.year}`);
   if (order.car.pricePerDay) doc.text(`Pret/zi: €${order.car.pricePerDay}`);
   doc.moveDown();
