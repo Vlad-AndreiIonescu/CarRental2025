@@ -63,6 +63,7 @@ const CarsMap = ({ locationGroups }) => {
                           src={car.image || '/default-car.jpg'} 
                           alt={`${car.make} ${car.model}`}
                           className="w-full h-full object-cover"
+                          onError={(e) => { e.target.src = "/default-car.png"; }}
                         />
                       </div>
                       <div className="flex-grow">
